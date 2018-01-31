@@ -1,15 +1,14 @@
 puts "Программа определит вид треугольника, для этого введите размеры 3 сторон треугольника:"
-a1 = gets.chomp
-b1 = gets.chomp
-c1 = gets.chomp
-a = a1.to_i
-b = b1.to_i
-c = c1.to_i
+a1 = gets.chomp.to_f
+b1 = gets.chomp.to_f
+c1 = gets.chomp.to_f
 
-c1 = ((a > b) && (a > c)) && (a*a == b*b + c*c)
-c2 = ((b > a) && (b > c)) && (b*b == a*a + c*c)
-c3 = !(c1 || c2) && (c*c == a*a + b*b)
-case1 = c1 || c2 || c3
+sides = [a1, b1, c1].sort!
+a = sides[0]
+b = sides[1]
+c = sides[2]
+
+case1 = c**2 == a**2 + b**2
 case2 = (a == b) && (b == c)
 case3 = (a == b) || (a == c) || (b == c)
 

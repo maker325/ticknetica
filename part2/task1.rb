@@ -1,10 +1,9 @@
 puts "Enter your name please:"
-name = gets.chomp
-name.capitalize!
+name = gets.chomp.capitalize
 
 puts "Enter your height please:"
-height = gets.chomp
-weight = (height.to_i - 110)
+height = gets.chomp.to_f
+weight = (height - 110)
 
 if weight > 0
   puts "#{name}, your ideal weight is #{weight}."
