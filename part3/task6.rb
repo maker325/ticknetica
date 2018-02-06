@@ -20,7 +20,8 @@ puts goods
 
 common_cost = 0
 goods.each do |name, amount|
-  common_cost += amount[:cost] * amount[:number]
-  puts "total cost of #{name} is: #{amount[:cost] * amount[:number]}"
+  total = amount[:cost] * amount[:number]
+  common_cost += total
+  puts "total cost of #{name} is: #{total}"
 end
 puts "total cost of all goods: #{common_cost}"
