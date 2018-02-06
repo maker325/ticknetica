@@ -11,4 +11,4 @@ hash = { january: 31,
          november: 30,
          december: 31 }
 
-hash.each { |month, day| print "#{month} " if day == 31 }
+hash.each { |month, day| print "#{month} " if day == 30 }
