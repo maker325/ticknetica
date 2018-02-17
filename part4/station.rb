@@ -1,10 +1,10 @@
 require './train.rb'
 
 class Station
-  attr_reader :trains, :station_name
+  attr_reader :trains, :name
 
   def initialize(station)
-    @station_name = station
+    @name = station
     @trains = []
   end
 
@@ -17,8 +17,7 @@ class Station
   end
 
   def get_trains(type = 'undefined')
-    puts "List of all #{type} trains:" unless @trains.nil?
-    puts @trains if type == 'undefined'
-    @trains.each { |train| puts "##{train}" if train.type == type }
+    @trains if type == 'undefined'
+    @trains.select { |train| "##{train}" if train.type == type }
   end
 end

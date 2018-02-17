@@ -12,6 +12,11 @@ class Route
   end
 
   def delete(station)
-    @stations.delete(station)
+    station_index = @stations.index(station)
+    @stations.delete(station) if station_index != @stations.size - 1 && station_index != 0
+  end
+
+  def get_stations
+    @stations.each_with_index { |name, index| puts "#{index += 1}) #{name};" }
   end
 end
