@@ -31,19 +31,17 @@ class Train
   end
 
   def go_to_next_station
-    go_to_station(@current_station + 1) unless @route.nil?
+    go_to_station(@current_station + 1) if what_station != @route.stations.last
   end
 
   def go_to_previous_station
-    go_to_station(@current_station - 1) unless @route.nil?
+    go_to_station(@current_station - 1) unless @route.nil? && @current_station == 0
   end
 
   def go_to_station(index = 0)
-    if next_station != @route.stations.last
-      what_station.send(self)
-      stations[index].accept(self)
-      @current_station = index
-    end
+    what_station.send(self)
+    @route.stations[index].accept(self)
+    @current_station = index
   end
 
   def what_station
@@ -51,15 +49,18 @@ class Train
   end
 
   def previous_station
-    @route.stations[@current_station - 1] unless @route.nil? && @current_station != 0
+    if @current_station != 0
+      @route.stations[@current_station - 1]
+    else
+      what_station
+    end
   end
 
   def next_station
-    @route.stations[@current_station + 1] unless @route.nil?
+    if what_station != @route.stations.last
+      @route.stations[@current_station + 1]
+    else
+      what_station
+    end
   end
 end
-
-route = Route.new('kzn', 'msk')
-route.add('lock')
-train = Train.new(1, 2)
-train.set_route(route)
