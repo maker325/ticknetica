@@ -17,7 +17,7 @@ class Station
   end
 
   def get_trains(type = 'undefined')
-    @trains if type == 'undefined'
+    return @trains if type == 'undefined'
     @trains.select { |train| "##{train}" if train.type == type }
   end
 end

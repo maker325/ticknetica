@@ -12,8 +12,7 @@ class Route
   end
 
   def delete(station)
-    station_index = @stations.index(station)
-    @stations.delete(station) if station_index != @stations.size - 1 && station_index != 0
+    @stations.delete(station) unless [@stations[0], @stations[-1]].include?(station)
   end
 
   def get_stations
