@@ -1,11 +1,11 @@
-require_relative 'CargoCarriage'
-require_relative 'CargoTrain'
-require_relative 'PassengerCarriage'
-require_relative 'PassengerTrain'
 require_relative 'Route'
 require_relative 'Station'
 require_relative 'Carriage'
 require_relative 'Train'
+require_relative 'CargoCarriage'
+require_relative 'CargoTrain'
+require_relative 'PassengerCarriage'
+require_relative 'PassengerTrain'
 
 class Interface
   def initialize
@@ -53,7 +53,7 @@ class Interface
       elsif choice == 10
         list_of_stations
       elsif choice == 11
-        list_of_trains
+        list_of_trains_on_station
       elsif choice == 12
         exit
       elsif choice == 0
@@ -176,19 +176,16 @@ class Interface
   end
 
   def set_path
-    if @trains.empty?
-      puts 'Для установки маршрута создайте поезд!'
-      new_train
-    end
+    check_trains
     puts 'Выберете индекс поезда для задания ему маршрута'
     list_of_trains
     train_index = gets.to_i
-    if trains.count >= train_index
+    if @trains.count >= train_index
       if @routes.empty?
         puts 'Нет маршрутов. Создайте:'
         new_route
       else
-        routes_list
+        list_of_routes
         puts "Выберете номер маршрута для поезда #{@trains[train_index - 1].number}"
         route_choice = gets.to_i
         @trains[train_index - 1].set_route(@routes[route_choice - 1])
@@ -220,17 +217,21 @@ class Interface
     @carriages.each_with_index { |carriage, index| print "#{index + 1}). #{carriage.type} " }
   end
 
-  def add_carriage
+  def check_trains
     if @trains.empty?
       puts 'для начала создайте поезд!:'
       new_train
     end
+  end
+
+  def add_carriage
+    check_trains
     if @carriages.empty?
       puts 'Для начала привезите вагоны!:'
       new_carriage
     end
-    puts 'Введите индекс поезда для добавления вагонов'
     list_of_trains
+    puts 'Введите индекс поезда для добавления вагонов'
     train_index = gets.to_i
     if @trains.count >= train_index
       puts 'Выберите вагон по номеру.'
@@ -238,16 +239,79 @@ class Interface
       list_of_carriages
       carriage_index = gets.to_i
       if carriage_index <= @carriages.count && @trains[train_index - 1].type == @carriages[carriage_index - 1].type
-        @trains[train_index - 1].hook_carriage[@carriages[carriage_index - 1]]
+        @trains[train_index - 1].hook_carriage(@carriages[carriage_index - 1])
         @carriages.delete_at(carriage_index - 1)
-        puts "#{@carriages[carriage_index - 1].type} вагон добавлен к поезду #{@trains[train_index - 1]}"
+        puts "Указанный вагон добавлен к поезду #{@trains[train_index - 1].number}"
       else
-        puts 'Ошибка ввода, повторите ещё раз'
-        add_carriage
+        puts 'Ошибка ввода, введите корректный индекс поезда или укжите верный тип вагона для данного типа поезда'
+        return
       end
     else
       puts 'Ошибка ввода'
       return
+    end
+  end
+
+  def delete_carriage
+    check_trains
+    list_of_trains
+    puts 'Введите индекс поезда для удаления вагонов'
+    train_index = gets.to_i
+    if @trains.count < train_index || @trains[train_index - 1].carriages.empty?
+      puts 'нет вагонов для отцепления либо введен неверный индекс поезда.'
+      return
+    else
+      puts 'Выберете вагон для отцепления:'
+      @trains[train_index - 1].carriages.each_with_index { |carriage, index| puts "#{index + 1}) #{carriage.type}" }
+      carriage_index = gets.to_i
+      if @trains[train_index - 1].carriages.count >= carriage_index
+        @carriages << @trains[train_index - 1].carriages[carriage_index - 1]
+        @trains[train_index - 1].unhook_carriage(@trains[train_index - 1].carriages[carriage_index - 1])
+        puts 'Вагон успешно отцеплен'
+      else
+        puts 'Все вагоны уже отцеплены или номер вагона указан неверно'
+      end
+    end
+  end
+
+  def move_train
+    check_trains
+    puts 'Введите индекс поезда для управления движением:'
+    list_of_trains
+    train_index = gets.to_i
+    if @trains.count < train_index && @trains[train_index - 1].route.empty?
+      puts 'Введен неверный номер поезда, либо маршрут у данного поезда не установлен'
+      return
+    else
+      puts "Текущая станция #{@trains[train_index - 1].current_station.name}"
+      puts '1. для движения назад'
+      puts '2. для движения вперед'
+      choice = gets.to_i
+      if choice == 2
+        @trains[train_index - 1].go_to_next_station
+      elsif choice == 1
+        @trains[train_index - 1].go_to_previous_station
+      else
+        puts 'Неверный ввод! повторите попытку'
+        move_train
+      end
+    end
+  end
+
+  def list_of_trains_on_station
+    if @stations.empty?
+      puts 'Нет станций, добавьте'
+      new_station
+    else
+      list_of_stations
+      puts 'Выберете номер станции для отображения текущих поездов на ней'
+      station_index = gets.to_i
+      if @stations[station_index - 1].trains.empty?
+        puts "На станции #{@stations[station_index - 1].name} нет поездов."
+      else
+        puts "На станции #{@stations[station_index - 1].name} находятся:"
+        @stations[station_index - 1].get_trains
+      end
     end
   end
 end

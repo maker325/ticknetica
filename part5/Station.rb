@@ -9,7 +9,7 @@ class Station
     @trains = []
   end
 
-  def accept_trains(train)
+  def accept_train(train)
     @trains.push(train) if train.class == CargoTrain || train.class == PassengerTrain
   end
 
@@ -17,7 +17,7 @@ class Station
     @trains.delete(train)
   end
 
-  def get_trains(type)
-    @trains.select { |train| "##{train}" if train.type == type }
+  def get_trains
+    @trains.each { |train| puts "Поезд № #{train.number}" }
   end
 end
