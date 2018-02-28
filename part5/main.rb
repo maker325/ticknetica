@@ -104,7 +104,7 @@ class Interface
     puts 'Создайте маршрут'
     if @stations.count < 2
       puts 'для создания маршрута необходимо минимум 2 станции! Создайте станцию:'
-      new_station
+      return
     end
     list_of_stations
     puts 'Выберете номер станции отправления'
@@ -182,8 +182,8 @@ class Interface
     train_index = gets.to_i
     if @trains.count >= train_index
       if @routes.empty?
-        puts 'Нет маршрутов. Создайте:'
-        new_route
+        puts 'Нет маршрутов. Для начала создайте пожалуйста маршрут.'
+        return
       else
         list_of_routes
         puts "Выберете номер маршрута для поезда #{@trains[train_index - 1].number}"
@@ -192,8 +192,7 @@ class Interface
         puts "Маршрут № #{route_choice}   назначен Поезду #{@trains[train_index - 1].number}"
       end
     else
-      puts 'Ошибка! Повторите ввод!'
-      set_path
+      puts 'Ошибка вода! Повторите повторите ввод в следующий раз корректно!'
     end
   end
 
@@ -208,8 +207,7 @@ class Interface
       @carriages << PassengerCarriage.new
       puts 'Добавлен пассажирский вагон'
     else
-      puts 'Ошибка ввода, повторите попытку'
-      new_carriage
+      puts 'Ошибка ввода, ввены некорректные данные.'
     end
   end
 
@@ -218,17 +216,14 @@ class Interface
   end
 
   def check_trains
-    if @trains.empty?
-      puts 'для начала создайте поезд!:'
-      new_train
-    end
+    puts 'для начала создайте поезд!:' if @trains.empty?
   end
 
   def add_carriage
     check_trains
     if @carriages.empty?
       puts 'Для начала привезите вагоны!:'
-      new_carriage
+      return
     end
     list_of_trains
     puts 'Введите индекс поезда для добавления вагонов'
@@ -248,7 +243,6 @@ class Interface
       end
     else
       puts 'Ошибка ввода'
-      return
     end
   end
 
@@ -293,7 +287,6 @@ class Interface
         @trains[train_index - 1].go_to_previous_station
       else
         puts 'Неверный ввод! повторите попытку'
-        move_train
       end
     end
   end
