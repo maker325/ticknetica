@@ -1,5 +1,5 @@
-require_relative 'CargoTrain'
-require_relative 'PassengerTrain'
+require_relative 'cargo_train'
+require_relative 'passenger_train'
 
 class Station
   attr_reader :trains, :name
