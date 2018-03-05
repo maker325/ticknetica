@@ -1,8 +1,8 @@
-require_relative 'Route'
-require_relative 'Station'
-require_relative 'Carriage'
-require_relative 'Manufacturer'
-require_relative 'InstanceCounter'
+require_relative 'route'
+require_relative 'station'
+require_relative 'carriage'
+require_relative 'manufacturer'
+require_relative 'instance_counter'
 
 class Train
   attr_reader :stations, :speed, :carriages, :number, :route

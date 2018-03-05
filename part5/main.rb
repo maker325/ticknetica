@@ -256,7 +256,7 @@ class Interface
       return
     else
       puts 'Выберете вагон для отцепления:'
-      @trains[train_index - 1].carriages.each_with_index { |carriage, index| puts "#{index + 1})}
+      @trains[train_index - 1].carriages.each_with_index { |_carriage, index| puts (index + 1).to_s }
       carriage_index = gets.to_i
       if @trains[train_index - 1].carriages.count >= carriage_index
         @carriages << @trains[train_index - 1].carriages[carriage_index - 1]

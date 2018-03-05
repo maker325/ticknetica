@@ -1,4 +1,4 @@
-require_relative 'Carriage'
+require_relative 'carriage'
 
 class CargoCarriage < Carriage
   def initialize

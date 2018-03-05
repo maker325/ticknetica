@@ -1,7 +1,7 @@
-require_relative 'Route'
-require_relative 'Station'
-require_relative 'Carriage'
-require_relative 'Train'
+require_relative 'route'
+require_relative 'station'
+require_relative 'carriage'
+require_relative 'train'
 require_relative 'cargo_carriage'
 require_relative 'cargo_train'
 require_relative 'passenger_carriage'
@@ -256,7 +256,7 @@ class Interface
       return
     else
       puts 'Выберете вагон для отцепления:'
-      @trains[train_index - 1].carriages.each_with_index { |carriage, index| puts "#{index + 1})}
+      @trains[train_index - 1].carriages.each_with_index { |_carriage, index| puts (index + 1).to_s }
       carriage_index = gets.to_i
       if @trains[train_index - 1].carriages.count >= carriage_index
         @carriages << @trains[train_index - 1].carriages[carriage_index - 1]

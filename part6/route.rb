@@ -1,4 +1,4 @@
-require_relative 'Station'
+require_relative 'station'
 
 class Route
   attr_reader :stations
