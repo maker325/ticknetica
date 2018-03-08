@@ -37,9 +37,9 @@ class Station
   protected
 
   def validate!
-    raise 'Имя не может быть пустым' if station.nil?
-    raise 'Имя не может быть короче 2 символов' if station.length < 2
-    raise 'Введенное имя некорректно, Должно быть: первый символ буква, последующие цифры или буквы' if name !~ NAME_FORMAT
+    raise 'Имя не может быть пустым' if @name.nil?
+    raise 'Имя не может быть короче 2 символов' if @name.length < 2
+    raise 'Введенное имя некорректно, Должно быть: первый символ буква, последующие цифры или буквы' if @name !~ STATION_FORMAT
     true
   end
 end

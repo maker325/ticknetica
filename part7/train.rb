@@ -51,21 +51,11 @@ class Train
   end
 
   def go_to_next_station
-    if current_station != @route.stations.last
-      go_to_station(@station_index + 1)
-      puts 'Перемещение вперед прошло успешно'
-    else
-      puts 'Поезд не переместился, так как он на конечной станции'
-    end
+    go_to_station(@station_index + 1) if current_station != @route.stations.last
   end
 
   def go_to_previous_station
-    if @route.nil? || @station_index == 0
-      puts 'Поезд не переместился, так как он на начальной станции'
-    else
-      go_to_station(@station_index - 1)
-      puts 'Перемещение назад прошло успешно'
-    end
+    go_to_station(@station_index - 1) unless @route.nil? || @station_index == 0
   end
 
   def current_station

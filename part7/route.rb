@@ -30,6 +30,7 @@ class Route
     unless @stations.first.is_a?(Station) && @stations.last.is_a?(Station)
       raise 'Маршрут должен состоять из объектов класса Station!'
     end
+    raise 'Маршрут не может идти из указанной станции в эту же станцию!' if @stations.first == @stations.last
     true
   end
 end

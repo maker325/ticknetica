@@ -70,6 +70,9 @@ class Interface
     name = gets.chomp.to_s
     @stations << Station.new(name)
     puts "Станция #{name} добавлена"
+  rescue RuntimeError => e
+    puts e.message
+    retry
   end
 
   def new_train
@@ -121,7 +124,7 @@ class Interface
     list_of_stations
     puts 'Выберете номер станции назначения'
     finish_station_index = gets.to_i
-    if @stations.include?(@stations[finish_station_index - 1]) && (start_station != @stations[finish_station_index - 1])
+    if @stations.include?(@stations[finish_station_index - 1])
       finish_station = @stations[finish_station_index - 1]
     else
       puts 'Введите корректный номер станции.'
@@ -129,6 +132,9 @@ class Interface
     end
     @routes << Route.new(start_station, finish_station)
     puts "маршрут от #{start_station.name} к #{finish_station.name} построен"
+  rescue RuntimeError => e
+    puts e.message
+    retry
   end
 
   def list_of_routes
@@ -289,8 +295,18 @@ class Interface
       choice = gets.to_i
       if choice == 2
         @trains[train_index - 1].go_to_next_station
+        unless @trains[train_index - 1].go_to_next_station.nil?
+          puts 'Перемещение вперед прошло успешно'
+        else
+          puts 'Вы находитесь на последней станции'
+        end
       elsif choice == 1
         @trains[train_index - 1].go_to_previous_station
+        unless @trains[train_index - 1].go_to_previous_station.nil?
+          puts 'Перемещение назад прошло успешно'
+        else
+          puts 'Вы находитесь на начальной станции'
+        end
       else
         puts 'Для осуществления движения наберите 1 или 2.'
       end
