@@ -6,21 +6,21 @@ class Carriage
   include InstanceCounter
   include Manufacturer
   include Validation
-  
-  attr_reader :spaces, :occupied_spaces, :free_spaces, :number, :type
+
+  attr_reader :spaces, :free_spaces, :number, :type
 
   def initialize(spaces)
-    @spaces = spaces
+    @spaces = spaces.to_i
     validate!
     @free_spaces = @spaces
-    @occupied_spaces = 0
     register_instance
     @number = self.class.instances
+    @type = 'Cargo' if self.class == CargoCarriage
+    @type = 'Passenger' if self.class == PassengerCarriage
   end
 
   def take_place(space)
     @free_spaces -= space if @free_spaces >= space
-    @occupied_spaces = @spaces - @free_spaces
   end
 
   protected

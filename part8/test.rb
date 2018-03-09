@@ -30,11 +30,11 @@ train.hook_carriage(carriage2)
 train2.hook_carriage(carriage3)
 train2.hook_carriage(carriage4)
 
-block = Proc.new { |x| puts "Номер поезда #{x.number}. Тип поезда: #{x.type}. Всего вагонов: #{x.carriages.count}" }
-block2 = Proc.new { |x| puts "Номер вагона #{x.number}. Тип вагона #{x.type}. Свободных мест: #{x.free_spaces}. Занятых мест: #{x.occupied_spaces}" }
-block3 = Proc.new { |x| puts "Номер вагона #{x.number}. Тип вагона #{x.type}. Свободное пространство: #{x.free_spaces}м3. Занято грузом: #{x.occupied_spaces}м3" }
+block = proc { |x| puts "Номер поезда #{x.number}. Тип поезда: #{x.type}. Всего вагонов: #{x.carriages.count}" }
+block2 = proc { |x| puts "Номер вагона #{x.number}. Тип вагона #{x.type}. Свободных мест: #{x.free_spaces}. Занятых мест: #{x.spaces - x.free_spaces}" }
+block3 = proc { |x| puts "Номер вагона #{x.number}. Тип вагона #{x.type}. Свободное пространство: #{x.free_spaces}м3. Занято грузом: #{x.spaces - x.free_spaces}м3" }
 
 
-train2.block_trains_carriage(block2)
-train.block_trains_carriage(block3)
-station1.block_station_trains(block)
+train2.each_train(block2)
+train.each_train(block3)
+station1.each_station(block)

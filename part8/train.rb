@@ -78,7 +78,7 @@ class Train
     end
   end
 
-  def block_trains_carriage(block)
+  def each_train(block)
     @carriages.each { |carriage| block.call(carriage) }
   end
 

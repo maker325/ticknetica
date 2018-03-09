@@ -34,7 +34,7 @@ class Station
     @trains.each { |train| puts "Поезд № #{train.number}" }
   end
 
-  def block_station_trains(block)
+  def each_station(block)
     @trains.each { |train| block.call(train) }
   end
 
