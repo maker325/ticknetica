@@ -349,8 +349,8 @@ class Interface
     list_of_trains
     @train_index = gets.to_i
     if @trains.count >= @train_index
-      block_pass = proc { |x| puts "Номер вагона #{x.number}. Тип вагона #{x.type}. Свободных мест: #{x.free_spaces}. Занятых мест: #{x.spaces - x.free_spaces}" }
-      block_cargo = proc { |x| puts "Номер вагона #{x.number}. Тип вагона #{x.type}. Свободное пространство: #{x.free_spaces}м3. Занято грузом: #{x.spaces - x.free_spaces}м3" }
+      block_pass = proc { |x| puts "Номер вагона #{x.number}. Тип вагона #{x.type}. Свободных мест: #{x.free_spaces}. Занятых мест: #{x.occupied_spaces}" }
+      block_cargo = proc { |x| puts "Номер вагона #{x.number}. Тип вагона #{x.type}. Свободное пространство: #{x.free_spaces}м3. Занято грузом: #{x.occupied_spaces}м3" }
       puts "На поезде #{@trains[@train_index - 1].number} находятся:"
       if @trains[@train_index - 1].type == 'Cargo'
         @trains[@train_index - 1].each_train(block_cargo)

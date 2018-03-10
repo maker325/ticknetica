@@ -2,7 +2,7 @@ require_relative 'carriage'
 
 class PassengerCarriage < Carriage
   def initialize(spaces)
-    super(spaces)
+    super(spaces, 'Passenger')
   end
 
   def take_place

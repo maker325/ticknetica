@@ -9,14 +9,13 @@ class Carriage
 
   attr_reader :spaces, :free_spaces, :number, :type
 
-  def initialize(spaces)
+  def initialize(spaces, type)
     @spaces = spaces.to_i
     validate!
     @free_spaces = @spaces
     register_instance
     @number = self.class.instances
-    @type = 'Cargo' if self.class == CargoCarriage
-    @type = 'Passenger' if self.class == PassengerCarriage
+    @type = type
   end
 
   def take_place(space)
@@ -24,6 +23,10 @@ class Carriage
   end
 
   protected
+
+  def occupied_spaces
+    @spaces - @free_spaces
+  end
 
   def validate!
     raise 'Вагон не может быть без свободных мест или без свободного пространства' if spaces.nil? || spaces =~ /\s/
