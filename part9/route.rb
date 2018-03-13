@@ -13,15 +13,15 @@ class Route
   end
 
   def add(station)
-    @stations.insert(-2, station)
+    @stations.insert(-2, station) unless @stations.include?(station)
   end
 
   def remove(station)
     @stations.delete(station) unless [@stations[0], @stations[-1]].include?(station)
   end
 
-  def get_stations
-    @stations.each_with_index { |station, index| print "#{index += 1}) #{station.name}; " }
+  def show_stations
+    @stations.each_with_index { |station, index| print "#{index + 1}) #{station.name}; " }
   end
 
   protected

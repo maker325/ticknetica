@@ -8,5 +8,4 @@ class PassengerCarriage < Carriage
   def take_place
     super(1)
   end
-
 end

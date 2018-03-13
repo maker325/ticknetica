@@ -1,11 +1,8 @@
 require_relative 'train'
 
 class PassengerTrain < Train
-  attr_reader :type
-
   def initialize(number)
-    super(number)
-    @type = 'Passenger'
+    super(number, 'Passenger')
   end
 
   def hook_carriage(carriage)

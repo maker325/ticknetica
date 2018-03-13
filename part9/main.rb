@@ -62,7 +62,7 @@ class Interface
         take_places
       elsif choice == 14
         exit
-      elsif choice == 0
+      elsif choice.zero?
         menu
       else
         puts 'Ошибка! Повторите ввод.'
@@ -148,7 +148,7 @@ class Interface
       puts 'Отсутствуют маршруты для изменения'
     else
       puts 'Список всех маршрутов:'
-      @routes.each_with_index { |route, index| puts "№#{index + 1} Маршрут #{route.get_stations} " }
+      @routes.each_with_index { |route, index| puts "№#{index + 1} Маршрут #{route.show_stations} " }
     end
   end
 
@@ -167,19 +167,17 @@ class Interface
       if station_index > @stations.count
         puts 'Введите корректный номер станции.'
       else
-        @routes[route_index - 1].add(@stations[station_index - 1])
-        puts "Станция #{@stations[station_index - 1].name} успешно добавлена к маршруту № #{route_index}"
+        p @routes[route_index - 1].add(@stations[station_index - 1]) ? "#{@stations[station_index - 1].name} добавлена к маршруту № #{route_index}" : 'Станция не добавлена к маршруту'
       end
     elsif action == 2
-      puts "список станций на данном маршруте: #{@routes[route_index - 1].get_stations}!"
+      puts "список станций на данном маршруте: #{@routes[route_index - 1].show_stations}!"
       puts 'Введите номер станции по списку ниже, которую хотите удалить из данного маршрута'
       list_of_stations
       station_index = gets.to_i
       if station_index > @stations.count
         puts 'Введите корректный номер станции.'
       else
-        @routes[route_index - 1].remove(@stations[station_index - 1])
-        puts "Станция #{@stations[station_index - 1].name} успешно удалена из маршрута № #{route_index}"
+        p @routes[route_index - 1].remove(@stations[station_index - 1]) ? "#{@stations[station_index - 1].name} удалена из маршрута № #{route_index}" : 'Операция отменена'
       end
     else
       puts 'ОШибка выбора дейтсвия, для выбора действия наберите 1 или 2'
@@ -203,7 +201,7 @@ class Interface
         list_of_routes
         puts "Выберете номер маршрута для поезда #{@trains[train_index - 1].number}"
         route_choice = gets.to_i
-        @trains[train_index - 1].set_route(@routes[route_choice - 1])
+        @trains[train_index - 1].paste_route(@routes[route_choice - 1])
         puts "Маршрут № #{route_choice}   назначен Поезду #{@trains[train_index - 1].number}"
       end
     else
@@ -281,7 +279,7 @@ class Interface
       return
     else
       puts 'Выберете вагон для отцепления:'
-      @trains[train_index - 1].carriages.each_with_index { |_carriage, index| puts (index + 1).to_s }
+      puts "Наберите номер вагона от 1 до #{@trains[train_index - 1].carriages.count}"
       carriage_index = gets.to_i
       if @trains[train_index - 1].carriages.count >= carriage_index
         @carriages << @trains[train_index - 1].carriages[carriage_index - 1]
@@ -307,19 +305,9 @@ class Interface
       puts '2. для движения вперед'
       choice = gets.to_i
       if choice == 2
-        @trains[train_index - 1].go_to_next_station
-        unless @trains[train_index - 1].go_to_next_station.nil?
-          puts 'Перемещение вперед прошло успешно'
-        else
-          puts 'Вы находитесь на последней станции'
-        end
+        p @trains[train_index - 1].go_to_next_station ? 'Перемещение вперед прошло успешно' : 'Вы на последней станции'
       elsif choice == 1
-        @trains[train_index - 1].go_to_previous_station
-        unless @trains[train_index - 1].go_to_previous_station.nil?
-          puts 'Перемещение назад прошло успешно'
-        else
-          puts 'Вы находитесь на начальной станции'
-        end
+        p @trains[train_index - 1].go_to_previous_station ? 'Перемещение назад прошло успешно' : 'Вы на начальной станции'
       else
         puts 'Для осуществления движения наберите 1 или 2.'
       end
@@ -364,20 +352,20 @@ class Interface
 
   def take_places
     list_of_carriages_on_train
-    puts "Выберите номер вагона, чтобы занять место:"
+    puts 'Выберите номер вагона, чтобы занять место:'
     carriage_index = gets.to_i
-    carriage = @trains[@train_index - 1].carriages[carriage_index-1]
+    carriage = @trains[@train_index - 1].carriages[carriage_index - 1]
+    str = 'Недостаточно места'
     if carriage.type == 'Passenger'
-      carriage.take_place
-      puts "Место в вагоне №#{carriage.number} выбрано. Осталось мест в поезде: #{carriage.free_spaces}"
-    elsif carriage.type == "Cargo"
+      str1 = "Место в вагоне №#{carriage.number} выбрано. Осталось: #{carriage.free_spaces}"
+      p carriage.take_place ? str1 : str
+    elsif carriage.type == 'Cargo'
       puts 'Введите объём, который хотите занять:'
       volume = gets.to_i
-      carriage.take_place(volume)
-      puts "#{volume}м3 было занято в вагоне №#{carriage.number}. Свободно: #{carriage.free_spaces}м3"
+      str2 = "#{volume}м3 занято в №#{carriage.number}. Свободно: #{carriage.free_spaces}м3"
+      p carriage.take_place(volume) ? str2 : str
     end
   end
-
 end
 
 int = Interface.new

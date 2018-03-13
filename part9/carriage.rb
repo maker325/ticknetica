@@ -22,11 +22,11 @@ class Carriage
     @free_spaces -= space if @free_spaces >= space
   end
 
-  protected
-
   def occupied_spaces
     @spaces - @free_spaces
   end
+
+  protected
 
   def validate!
     raise 'Вагон не может быть без свободных мест или без свободного пространства' if spaces.nil? || spaces =~ /\s/

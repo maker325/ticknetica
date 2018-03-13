@@ -7,7 +7,6 @@ require_relative 'cargo_train'
 require_relative 'passenger_carriage'
 require_relative 'passenger_train'
 
-
 station1 = Station.new('MSK')
 station2 = Station.new('KZN')
 
@@ -33,7 +32,6 @@ train2.hook_carriage(carriage4)
 block = proc { |x| puts "Номер поезда #{x.number}. Тип поезда: #{x.type}. Всего вагонов: #{x.carriages.count}" }
 block2 = proc { |x| puts "Номер вагона #{x.number}. Тип вагона #{x.type}. Свободных мест: #{x.free_spaces}. Занятых мест: #{x.occupied_spaces}" }
 block3 = proc { |x| puts "Номер вагона #{x.number}. Тип вагона #{x.type}. Свободное пространство: #{x.free_spaces}м3. Занято грузом: #{x.occupied_spaces}м3" }
-
 
 train2.each_train(block2)
 train.each_train(block3)

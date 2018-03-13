@@ -4,11 +4,11 @@ require_relative 'instance_counter'
 require_relative 'validation'
 
 class Station
-  attr_reader :trains, :name
-  @@stations = []
   include InstanceCounter
   include Validation
   STATION_FORMAT = /^[a-zA-Zа-яА-Я]{1}[a-zA-Zа-яА-Я0-9]+$/
+  attr_reader :trains, :name
+  @@stations = []
 
   def self.all
     @@stations
@@ -30,7 +30,7 @@ class Station
     @trains.delete(train)
   end
 
-  def get_trains
+  def show_trains
     @trains.each { |train| puts "Поезд № #{train.number}" }
   end
 
