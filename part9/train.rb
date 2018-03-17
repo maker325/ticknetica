@@ -68,7 +68,11 @@ class Train
   end
 
   def next_station
-    current_station == @route.stations.last ? current_station : @route.stations[@station_index + 1]
+    if current_station == @route.stations.last
+      current_station
+    else
+      @route.stations[@station_index + 1]
+    end
   end
 
   def each_train(block)
@@ -85,10 +89,10 @@ class Train
   end
 
   def validate!
-    raise 'Номер не может быть пустым' if number.nil?
-    raise 'Номер не может быть короче 5 символов' if number.length < 5
-    raise 'Введенный номер не соответсвует номеру поезда.' unless number =~ NUMBER_FORMAT
-    raise 'Номера поездов не могут повторяться.' unless @@trains[number].nil?
+    raise 'Номер не может быть пустым' if @number.nil?
+    raise 'Номер не может быть короче 5 символов' if @number.length < 5
+    raise 'Введенный номер не соответсвует номеру поезда.' unless @number =~ NUMBER_FORMAT
+    raise 'Номера поездов не могут повторяться.' unless @@trains[@number].nil?
     true
   end
 end

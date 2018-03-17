@@ -108,7 +108,7 @@ class Interface
       puts 'Cтанции не созданы'
     else
       puts 'список всех станций:'
-      @stations.each_with_index { |stat, index| puts "Станция №#{index + 1}: #{stat.name}" }
+      @stations.each_with_index { |s, i| puts "Станция №#{i + 1}: #{s.name}" }
     end
   end
 
@@ -148,7 +148,7 @@ class Interface
       puts 'Отсутствуют маршруты для изменения'
     else
       puts 'Список всех маршрутов:'
-      @routes.each_with_index { |route, index| puts "№#{index + 1} Маршрут #{route.show_stations} " }
+      @routes.each_with_index { |r, i| puts "№#{i + 1} Маршрут #{r.show_stations} " }
     end
   end
 
@@ -160,50 +160,43 @@ class Interface
     puts '1. Добавить станцию'
     puts '2. Удалить станцию'
     action = gets.to_i
+    str2 = 'Операция не выполнена'
     if action == 1
       puts 'Введите номер станции, которую хотите добавить в выбранный маршрут'
       list_of_stations
-      station_index = gets.to_i
-      if station_index > @stations.count
-        puts 'Введите корректный номер станции.'
-      else
-        p @routes[route_index - 1].add(@stations[station_index - 1]) ? "#{@stations[station_index - 1].name} добавлена к маршруту № #{route_index}" : 'Станция не добавлена к маршруту'
-      end
+      station_index = gets.to_i - 1
+      return puts 'Введите корректный номер станции.' if station_index >= @stations.count
+      str1 = "#{@stations[station_index].name} добавлена к маршруту № #{route_index}"
+      p @routes[route_index - 1].add(@stations[station_index]) ? str1 : str2
     elsif action == 2
-      puts "список станций на данном маршруте: #{@routes[route_index - 1].show_stations}!"
-      puts 'Введите номер станции по списку ниже, которую хотите удалить из данного маршрута'
+      puts "список станций на маршруте: #{@routes[route_index - 1].show_stations}!"
+      puts 'Введите номер станции по списку, которую хотите удалить из маршрута'
       list_of_stations
-      station_index = gets.to_i
-      if station_index > @stations.count
-        puts 'Введите корректный номер станции.'
-      else
-        p @routes[route_index - 1].remove(@stations[station_index - 1]) ? "#{@stations[station_index - 1].name} удалена из маршрута № #{route_index}" : 'Операция отменена'
-      end
+      station_index = gets.to_i - 1
+      return puts 'Введите корректный номер станции.' if station_index >= @stations.count
+      str1 = "#{@stations[station_index].name} удалена из маршрута № #{route_index}"
+      p @routes[route_index - 1].remove(@stations[station_index]) ? str1 : str2
     else
-      puts 'ОШибка выбора дейтсвия, для выбора действия наберите 1 или 2'
+      puts 'ОШибка выбора действия, для выбора действия наберите 1 или 2'
     end
   end
 
   def list_of_trains
-    @trains.each_with_index { |train, index| puts "#{index + 1}) Поезд №#{train.number} #{train.type}" }
+    @trains.each_with_index { |t, i| puts "#{i + 1}) Поезд №#{t.number} #{t.type}" }
   end
 
   def set_path
     check_trains
     puts 'Выберете индекс поезда для задания ему маршрута'
     list_of_trains
-    train_index = gets.to_i
-    if @trains.count >= train_index
-      if @routes.empty?
-        puts 'Нет маршрутов. Для начала создайте пожалуйста маршрут.'
-        return
-      else
-        list_of_routes
-        puts "Выберете номер маршрута для поезда #{@trains[train_index - 1].number}"
-        route_choice = gets.to_i
-        @trains[train_index - 1].paste_route(@routes[route_choice - 1])
-        puts "Маршрут № #{route_choice}   назначен Поезду #{@trains[train_index - 1].number}"
-      end
+    train_index = gets.to_i - 1
+    if @trains.count > train_index
+      return puts 'Для начала создайте пожалуйста маршрут.' if @routes.empty?
+      list_of_routes
+      puts "Выберете номер маршрута для поезда #{@trains[train_index].number}"
+      route_choice = gets.to_i
+      @trains[train_index].paste_route(@routes[route_choice - 1])
+      puts "Маршрут № #{route_choice} назначен Поезду #{@trains[train_index].number}"
     else
       puts 'Введите индекc пожалуйста корректно!'
     end
@@ -232,40 +225,33 @@ class Interface
   end
 
   def list_of_carriages
-    @carriages.each_with_index { |carriage, index| print "#{index + 1}). #{carriage.type} " }
+    @carriages.each_with_index { |c, i| print "#{i + 1}). #{c.type}" }
   end
 
   def check_trains
-    if @trains.empty?
-      puts 'для начала создайте поезд!:'
-      menu
-    end
+    return unless @trains.empty?
+    puts 'для начала создайте поезд!:'
+    menu
   end
 
   def add_carriage
     check_trains
-    if @carriages.empty?
-      puts 'Для начала привезите вагоны!:'
-      return
-    end
+    return puts 'Для начала привезите вагоны!' if @carriages.empty?
     list_of_trains
     puts 'Введите индекс поезда для добавления вагонов'
     train_index = gets.to_i
-    if @trains.count >= train_index
-      puts 'Выберите вагон по номеру.'
-      puts 'Список свободных вагонов:'
-      list_of_carriages
-      carriage_index = gets.to_i
-      if carriage_index <= @carriages.count && @trains[train_index - 1].type == @carriages[carriage_index - 1].type
-        @trains[train_index - 1].hook_carriage(@carriages[carriage_index - 1])
-        @carriages.delete_at(carriage_index - 1)
-        puts "Указанный вагон добавлен к поезду #{@trains[train_index - 1].number}"
-      else
-        puts 'Ошибка ввода, введите корректный индекс поезда или укажите верный тип вагона для данного типа поезда'
-        return
-      end
+    return puts 'Введите корректный индекс поезда' if @trains.count >= train_index
+    puts 'Выберите вагон по номеру.'
+    puts 'Список свободных вагонов:'
+    list_of_carriages
+    carriage_index = gets.to_i - 1
+    return puts 'Введите корректный индекс вагона' if carriage_index < @carriages.count
+    if @trains[train_index].type == @carriages[carriage_index].type
+      @trains[train_index - 1].hook_carriage(@carriages[carriage_index])
+      @carriages.delete_at(carriage_index)
+      puts "Указанный вагон добавлен к поезду #{@trains[train_index - 1].number}"
     else
-      puts 'Введите корректный индекс поезда'
+      puts 'Выберете соответсвующий тип вагона!'
     end
   end
 
@@ -273,61 +259,53 @@ class Interface
     check_trains
     list_of_trains
     puts 'Введите индекс поезда для удаления вагонов'
-    train_index = gets.to_i
-    if @trains.count < train_index || @trains[train_index - 1].carriages.empty?
+    train_i = gets.to_i - 1
+    if @trains.count <= train_i || @trains[train_i].carriages.empty?
       puts 'нет вагонов для отцепления либо введен неверный индекс поезда.'
       return
     else
       puts 'Выберете вагон для отцепления:'
-      puts "Наберите номер вагона от 1 до #{@trains[train_index - 1].carriages.count}"
-      carriage_index = gets.to_i
-      if @trains[train_index - 1].carriages.count >= carriage_index
-        @carriages << @trains[train_index - 1].carriages[carriage_index - 1]
-        @trains[train_index - 1].unhook_carriage(@trains[train_index - 1].carriages[carriage_index - 1])
-        puts 'Вагон успешно отцеплен'
-      else
-        puts 'Все вагоны уже отцеплены или номер вагона указан неверно'
-      end
+      puts "Наберите номер вагона от 1 до #{@trains[train_i].carriages.count}"
+      carriage_i = gets.to_i - 1
+      return puts 'Номер указан неверно' if @trains[train_i].carriages.count <= carriage_i
+      @carriages << @trains[train_i].carriages[carriage_i]
+      @trains[train_i].unhook_carriage(@trains[train_i].carriages[carriage_i])
+      puts 'Вагон успешно отцеплен'
     end
   end
 
   def move_train
+    # train.route.empty? -ADD!
     check_trains
     puts 'Введите индекс поезда для управления движением:'
     list_of_trains
     train_index = gets.to_i
-    if @trains.count < train_index && @trains[train_index - 1].route.empty?
-      puts 'Введен неверный номер поезда, либо маршрут у данного поезда не установлен'
-      return
+    train = @trains[train_index - 1]
+    return puts 'Введен неверный номер поезда' if @trains.count < train_index
+    puts "Текущая станция #{train.current_station.name}"
+    puts '1. для движения назад'
+    puts '2. для движения вперед'
+    choice = gets.to_i
+    if choice == 2
+      puts train.go_to_next_station ? 'успешно' : 'Вы на последней станции'
+    elsif choice == 1
+      puts train.go_to_previous_station ? 'успешно' : 'Вы на начальной станции'
     else
-      puts "Текущая станция #{@trains[train_index - 1].current_station.name}"
-      puts '1. для движения назад'
-      puts '2. для движения вперед'
-      choice = gets.to_i
-      if choice == 2
-        p @trains[train_index - 1].go_to_next_station ? 'Перемещение вперед прошло успешно' : 'Вы на последней станции'
-      elsif choice == 1
-        p @trains[train_index - 1].go_to_previous_station ? 'Перемещение назад прошло успешно' : 'Вы на начальной станции'
-      else
-        puts 'Для осуществления движения наберите 1 или 2.'
-      end
+      puts 'Для осуществления движения наберите 1 или 2.'
     end
   end
 
   def list_of_trains_on_station
-    if @stations.empty?
-      puts 'Нет станций, добавьте'
+    return puts 'Нет станций, добавьте' if @stations.empty?
+    list_of_stations
+    puts 'Выберете номер станции для отображения текущих поездов на ней'
+    station_index = gets.to_i
+    if @stations[station_index - 1].trains.empty?
+      puts "На станции #{@stations[station_index - 1].name} нет поездов."
     else
-      list_of_stations
-      puts 'Выберете номер станции для отображения текущих поездов на ней'
-      station_index = gets.to_i
-      if @stations[station_index - 1].trains.empty?
-        puts "На станции #{@stations[station_index - 1].name} нет поездов."
-      else
-        block = proc { |x| puts "Номер поезда #{x.number}. Тип поезда: #{x.type}. Всего вагонов: #{x.carriages.count}" }
-        puts "На станции #{@stations[station_index - 1].name} находятся:"
-        @stations[station_index - 1].each_station(block)
-      end
+      block = proc { |x| puts "Номер поезда #{x.number}. Тип: #{x.type}.Вагонов: #{x.carriages.count}" }
+      puts "На станции #{@stations[station_index - 1].name} находятся:"
+      @stations[station_index - 1].each_station(block)
     end
   end
 
@@ -336,17 +314,14 @@ class Interface
     puts 'Введите индекс поезда:'
     list_of_trains
     @train_index = gets.to_i
-    if @trains.count >= @train_index
-      block_pass = proc { |x| puts "Номер вагона #{x.number}. Тип вагона #{x.type}. Свободных мест: #{x.free_spaces}. Занятых мест: #{x.occupied_spaces}" }
-      block_cargo = proc { |x| puts "Номер вагона #{x.number}. Тип вагона #{x.type}. Свободное пространство: #{x.free_spaces}м3. Занято грузом: #{x.occupied_spaces}м3" }
-      puts "На поезде #{@trains[@train_index - 1].number} находятся:"
-      if @trains[@train_index - 1].type == 'Cargo'
-        @trains[@train_index - 1].each_train(block_cargo)
-      elsif @trains[@train_index - 1].type == 'Passenger'
-        @trains[@train_index - 1].each_train(block_pass)
-      end
-    else
-      puts 'Введите индекс пожалуйста корректно!'
+    return puts 'Введите индекс пожалуйста корректно!' if @trains.count >= @train_index
+    block_pass = proc { |x| puts "Номер вагона #{x.number}. Тип #{x.type}. Свободных мест: #{x.free_spaces}. Занято: #{x.occupied_spaces}" }
+    block_cargo = proc { |x| puts "Номер вагона #{x.number}. Тип #{x.type}. Свободное пространство: #{x.free_spaces}м3. Занято: #{x.occupied_spaces}м3" }
+    puts "На поезде #{@trains[@train_index - 1].number} находятся:"
+    if @trains[@train_index - 1].type == 'Cargo'
+      @trains[@train_index - 1].each_train(block_cargo)
+    elsif @trains[@train_index - 1].type == 'Passenger'
+      @trains[@train_index - 1].each_train(block_pass)
     end
   end
 

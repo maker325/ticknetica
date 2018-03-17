@@ -29,7 +29,7 @@ class Carriage
   protected
 
   def validate!
-    raise 'Вагон не может быть без свободных мест или без свободного пространства' if spaces.nil? || spaces =~ /\s/
+    raise 'Введите объём или количество мест!' if @spaces.nil? || @spaces =~ /\s/
     true
   end
 end
