@@ -6,8 +6,11 @@ require_relative 'validation'
 class Station
   include InstanceCounter
   include Validation
+
   STATION_FORMAT = /^[a-zA-Zа-яА-Я]{1}[a-zA-Zа-яА-Я0-9]+$/
+
   attr_reader :trains, :name
+
   @@stations = []
 
   def self.all
