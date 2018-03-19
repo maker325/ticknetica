@@ -26,6 +26,10 @@ class Carriage
     @spaces - @free_spaces
   end
 
+  def info
+    "Номер вагона: #{number}. Тип #{type}."
+  end
+
   protected
 
   def validate!

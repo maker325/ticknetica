@@ -9,9 +9,10 @@ class Train
   include Manufacturer
   include InstanceCounter
   include Validation
-  attr_reader :stations, :speed, :carriages, :number, :route, :type
 
   NUMBER_FORMAT = /^[a-zA-Zа-яА-Я0-9]{3}-?[a-zA-Zа-яА-Я0-9]{2}$/
+
+  attr_reader :stations, :speed, :carriages, :number, :route, :type
 
   @@trains = {}
 
@@ -77,6 +78,10 @@ class Train
 
   def each_train(block)
     @carriages.each { |carriage| block.call(carriage) }
+  end
+
+  def info
+    "Номер поезда #{number}. Тип: #{type}. Всего вагонов: #{carriages.count}"
   end
 
   protected
