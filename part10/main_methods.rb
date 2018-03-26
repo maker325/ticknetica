@@ -36,6 +36,36 @@ class Interface
     new_train_do(number, type)
   end
 
+  def color_of_train
+    return unless chouse_train
+    puts 'Введите цвет поезда:'
+    color = gets.chomp.to_s
+    @trains[@train_index].color = color
+  end
+
+  def color_history_of_train
+    return unless chouse_train
+    puts 'Предыдущие цвета:'
+    if @trains[@train_index].color_history
+      @trains[@train_index].color_history.each { |color| puts color }
+    else
+      puts 'Поезд еще не перекрашивался!'
+    end
+    str1 = "Текущий цвет поезда: #{@trains[@train_index].color}."
+    str2 = 'Поезд ещё не был покрашен'
+    puts @trains[@train_index].color ? str1 : str2
+  end
+
+  def speed_of_train
+    return unless chouse_train
+    puts 'Введите скорость поезда:'
+    speed = gets.chomp.to_i # если сделать to_i то проверка на Integer будет проходить с любом случае... а так чисто для демонстрации
+    @trains[@train_index].speed = speed
+  rescue RuntimeError => e
+    puts e.message
+    retry
+  end
+
   def new_route_show
     str = 'Для создания маршрута необходимо минимум 2 станции! Создайте станцию!'
     return puts str if @stations.count < 2

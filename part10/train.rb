@@ -14,7 +14,9 @@ class Train
 
   NUMBER_FORMAT = /^[a-zA-Zа-яА-Я0-9]{3}-?[a-zA-Zа-яА-Я0-9]{2}$/
 
-  attr_reader :stations, :speed, :carriages, :number, :route, :type
+  attr_reader :stations, :carriages, :number, :route, :type
+  strong_attr_accessor :speed, Integer
+  attr_accessor_with_history :color
 
   @@trains = {}
 

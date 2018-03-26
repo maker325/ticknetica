@@ -44,10 +44,8 @@ module Validation
       str = 'Неправильный тип параметра!'
       if type.class == Class
         raise str unless var.is_a? type
-      elsif type.class == Symbol
-        raise str unless var == type
       else
-        raise str
+        raise 'Параметр должен быть должен классом!'
       end
     end
   end

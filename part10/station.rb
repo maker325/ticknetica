@@ -12,8 +12,6 @@ class Station
   STATION_FORMAT = /^[a-zA-Zа-яА-Я]{1}[a-zA-Zа-яА-Я0-9]+$/
 
   attr_reader :trains, :name
-  # attr_accessor_with_history :trains - можно добавить, чтобы посмотреть, какие поезда проезжали
-  # strong_attr_accessor :trains, Trains - можно добавить, чтобы принимал только поезда
   validate :name, :presence
   validate :name, :format, STATION_FORMAT
 

@@ -35,14 +35,17 @@ class Menu
     2 => :add_carriage,
     3 => :delete_carriage,
     4 => :move_train,
-    5 => :take_places
+    5 => :take_places,
+    6 => :color_of_train,
+    7 => :speed_of_train
   }.freeze
 
   ACTIONS_LIST_OF_OBJECTS = {
     1 => :list_of_stations,
     2 => :list_of_trains_on_station,
     3 => :list_of_carriages_on_train,
-    4 => :list_of_routes
+    4 => :list_of_routes,
+    5 => :color_history_of_train
   }.freeze
 
   def show_menu
@@ -74,9 +77,9 @@ class Menu
   def objects_action
     show_objects_action
     choice = gets.chomp.to_i
-    return if choice == 6
+    return if choice == 8
     @main.send ACTIONS_OBJECTS_ACTIONS[choice] if ACTIONS_OBJECTS_ACTIONS[choice]
-    puts 'Выберите пункты от 1 до 6.'
+    puts 'Выберите пункты от 1 до 8.'
     objects_action
   end
 
@@ -86,13 +89,15 @@ class Menu
     puts '3. Отцепить вагоны от поезда.'
     puts '4. Переместить поезд по маршруту вперед или назад.'
     puts '5. Занять место в вагоне.'
-    puts '6. Основное меню.'
+    puts '6. Покрасить поезд.'
+    puts '7. Задать скорость поезда.'
+    puts '8. Основное меню.'
   end
 
   def list_of_objects
     show_list_of_objects
     choice = gets.chomp.to_i
-    return if choice == 5
+    return if choice == 6
     @main.send ACTIONS_LIST_OF_OBJECTS[choice] if ACTIONS_LIST_OF_OBJECTS[choice]
     puts 'Выберите пункты от 1 до 5.'
     list_of_objects
@@ -103,7 +108,8 @@ class Menu
     puts '2. Cписок поездов на станции.'
     puts '3. Cписок вагонов поезда.'
     puts '4. Список маршрутов.'
-    puts '5. Основное меню.'
+    puts '5. Посмотреть список изменения цветов поездов.'
+    puts '6. Основное меню.'
   end
 end
 
